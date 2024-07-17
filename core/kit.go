@@ -15,3 +15,5 @@ func same(a, b string) bool {
 func diff(a, b string) bool {
 	return !same(a, b)
 }
+func invalid(a interface{}) bool { return a == nil }
+func valid(a interface{}) bool   { return a != nil }

@@ -1,1 +1,5 @@
-package pero
+package main
+
+func main() {
+
+}
