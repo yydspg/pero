@@ -16,13 +16,27 @@ type ItemReq struct {
 	DestUrl   string `db:"dest_url" json:"dest_url"`
 	Version   int    `db:"version" json:"version"`
 }
+type ItemUpdateReq struct {
+	ServiceID uint64 `db:"service_id" json:"service_id"`
+	ItemID    uint64 `db:"item_id" json:"item_id"`
+	Version   int    `db:"version" json:"version"`
+	IsValid   int8   `db:"is_valid" json:"is_valid"`
+}
 
-func buildItem(i *ItemReq) *Item {
+func buildItemFromCreate(i *ItemReq) *Item {
 	var r Item
 	r.ServiceID = i.ServiceID
 	r.DestUrl = i.DestUrl
 	r.Version = i.Version
 	r.IsValid = 0
 	r.ItemID = pero.iID.Add(1)
+	return &r
+}
+func buildItemFromUpdate(i *ItemUpdateReq) *Item {
+	var r Item
+	r.ServiceID = i.ServiceID
+	r.ItemID = i.ItemID
+	r.Version = i.Version
+	r.IsValid = i.IsValid
 	return &r
 }

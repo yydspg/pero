@@ -11,6 +11,25 @@ type PeroHttp struct {
 	r    *gin.Engine
 	pool sync.Pool
 }
+
+func New() *PeroHttp {
+	l := &PeroHttp{
+		r:    gin.New(),
+		pool: sync.Pool{},
+	}
+	l.r.Use(gin.Recovery())
+	l.pool.New = func() interface{} {
+		return allocateContext()
+	}
+	return l
+}
+func allocateContext() *Context {
+	return &Context{Context: nil, lg: zerolog.Logger{}}
+}
+func (l *PeroHttp) UseGin(handlers ...gin.HandlerFunc) {
+	l.r.Use(handlers...)
+}
+
 type Context struct {
 	*gin.Context
 	lg zerolog.Logger
