@@ -1,8 +1,10 @@
 package main
 
-import "pero/core"
+import (
+	"pero/core"
+)
 
 func main() {
 	pero := core.New()
-	pero.GetRoute()
+	pero.Run()
 }

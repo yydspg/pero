@@ -8,16 +8,16 @@ import (
 )
 
 type PeroHttp struct {
-	r    *gin.Engine
+	R    *gin.Engine
 	pool sync.Pool
 }
 
 func New() *PeroHttp {
 	l := &PeroHttp{
-		r:    gin.New(),
+		R:    gin.New(),
 		pool: sync.Pool{},
 	}
-	l.r.Use(gin.Recovery())
+	l.R.Use(gin.Recovery())
 	l.pool.New = func() interface{} {
 		return allocateContext()
 	}
@@ -27,7 +27,7 @@ func allocateContext() *Context {
 	return &Context{Context: nil, lg: zerolog.Logger{}}
 }
 func (l *PeroHttp) UseGin(handlers ...gin.HandlerFunc) {
-	l.r.Use(handlers...)
+	l.R.Use(handlers...)
 }
 
 type Context struct {
@@ -41,7 +41,7 @@ type RouterGroup struct {
 }
 
 func (l *PeroHttp) Group(relativePath string) *RouterGroup {
-	return newRouterGroup(l.r.Group(relativePath), l)
+	return newRouterGroup(l.R.Group(relativePath), l)
 }
 func newRouterGroup(g *gin.RouterGroup, l *PeroHttp) *RouterGroup {
 	return &RouterGroup{RouterGroup: g, L: l}
